@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(ls /root/route-less-spent/.env*)",
+      "Bash(npm run:*)",
+      "Bash(npx next:*)",
+      "Bash(node_modules/.bin/next build:*)",
+      "Bash(cp:*)",
+      "Bash(node:*)",
+      "Read(//tmp/**)",
+      "Bash(tar -xzf stripe.tgz)",
+      "Bash(cp /tmp/package/cjs/platform/NodePlatformFunctions.js /root/route-less-spent/node_modules/stripe/cjs/platform/)",
+      "Bash(cp /tmp/package/cjs/platform/PlatformFunctions.js /root/route-less-spent/node_modules/stripe/cjs/platform/)",
+      "Bash(cp /tmp/package/cjs/Error.js /tmp/package/cjs/RequestSender.js /tmp/package/cjs/autoPagination.js /tmp/package/cjs/apiVersion.js /tmp/package/cjs/multipart.js /root/route-less-spent/node_modules/stripe/cjs/)",
+      "Bash(cp -r /tmp/package/cjs/crypto /tmp/package/cjs/net /root/route-less-spent/node_modules/stripe/cjs/)",
+      "Bash(cp -rn /tmp/package/cjs/resources /root/route-less-spent/node_modules/stripe/cjs/)",
+      "Bash(cp -rn /tmp/package/esm/resources /root/route-less-spent/node_modules/stripe/esm/)",
+      "Bash(node_modules/.bin/next dev:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(/root/route-less-spent/.gitignore:*)"
+    ]
+  }
+}
