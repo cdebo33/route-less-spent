@@ -19,7 +19,18 @@
       "Bash(node_modules/.bin/next dev:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(/root/route-less-spent/.gitignore:*)"
+      "Bash(/root/route-less-spent/.gitignore:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(curl -sL https://cli.github.com/packages/githubcli-archive-keyring.gpg)",
+      "Bash(tee /etc/apt/sources.list.d/github-cli.list)",
+      "Bash(apt-get update:*)",
+      "Bash(apt-get install:*)",
+      "Bash(gh auth:*)",
+      "Bash(gh repo:*)",
+      "Bash(ls:*)"
     ]
   }
 }

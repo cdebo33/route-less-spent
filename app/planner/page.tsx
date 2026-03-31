@@ -166,16 +166,16 @@ function PlannerContent() {
   const remainingFree = Math.max(0, FREE_LIMIT - usageCount)
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-gray-950">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-black text-white mb-2">
             Plan Your Budget Trip ✈️
           </h1>
-          <p className="text-gray-500">
+          <p className="text-gray-400">
             Fill in your details and get a complete AI-generated itinerary with cost breakdowns.
           </p>
 
@@ -183,10 +183,10 @@ function PlannerContent() {
           {!isPro && (
             <div className={`inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-full text-sm font-medium ${
               remainingFree === 0
-                ? 'bg-red-100 text-red-700'
+                ? 'bg-red-950 text-red-400 border border-red-800'
                 : remainingFree === 1
-                ? 'bg-yellow-100 text-yellow-700'
-                : 'bg-primary-100 text-primary-700'
+                ? 'bg-yellow-950 text-yellow-400 border border-yellow-800'
+                : 'bg-primary-950 text-primary-400 border border-primary-800'
             }`}>
               {remainingFree === 0 ? (
                 <>⚠️ Free limit reached — <Link href="/pricing" className="underline font-bold">Upgrade to Pro</Link></>
@@ -196,7 +196,7 @@ function PlannerContent() {
             </div>
           )}
           {isPro && (
-            <div className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-full text-sm font-medium bg-primary-100 text-primary-700">
+            <div className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-full text-sm font-medium bg-primary-950 text-primary-400 border border-primary-800">
               ✨ Pro — Unlimited itineraries
             </div>
           )}
@@ -206,7 +206,7 @@ function PlannerContent() {
           {/* Form */}
           <div className="lg:col-span-2">
             <div className="card space-y-5 sticky top-24">
-              <h2 className="font-bold text-gray-900 text-lg border-b border-gray-100 pb-3">
+              <h2 className="font-bold text-white text-lg border-b border-gray-700 pb-3">
                 Trip Details
               </h2>
 
@@ -270,7 +270,7 @@ function PlannerContent() {
                   Total Budget (USD) <span className="text-red-400">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
                   <input
                     type="number"
                     className="input-field pl-7"
@@ -281,7 +281,7 @@ function PlannerContent() {
                   />
                 </div>
                 {form.budget && nights > 0 && (
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-xs text-gray-500 mt-1">
                     ≈ ${Math.round(parseInt(form.budget) / (nights || 1))}/day per person
                   </p>
                 )}
@@ -312,8 +312,8 @@ function PlannerContent() {
                       key={style.value}
                       className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                         form.accommodation === style.value
-                          ? 'border-primary-400 bg-primary-50'
-                          : 'border-gray-100 hover:border-gray-200 bg-white'
+                          ? 'border-primary-500 bg-primary-950'
+                          : 'border-gray-700 hover:border-gray-600 bg-gray-800'
                       }`}
                     >
                       <input
@@ -324,8 +324,8 @@ function PlannerContent() {
                         onChange={() => handleChange('accommodation', style.value)}
                         className="sr-only"
                       />
-                      <span className="text-sm font-medium text-gray-900 flex-1">{style.label}</span>
-                      <span className="text-xs text-gray-400 hidden sm:block">{style.desc}</span>
+                      <span className="text-sm font-medium text-gray-100 flex-1">{style.label}</span>
+                      <span className="text-xs text-gray-500 hidden sm:block">{style.desc}</span>
                     </label>
                   ))}
                 </div>
@@ -340,8 +340,8 @@ function PlannerContent() {
                       key={vibe.value}
                       className={`flex flex-col p-3 rounded-xl border-2 cursor-pointer transition-all text-center ${
                         form.vibe === vibe.value
-                          ? 'border-primary-400 bg-primary-50'
-                          : 'border-gray-100 hover:border-gray-200 bg-white'
+                          ? 'border-primary-500 bg-primary-950'
+                          : 'border-gray-700 hover:border-gray-600 bg-gray-800'
                       }`}
                     >
                       <input
@@ -353,14 +353,14 @@ function PlannerContent() {
                         className="sr-only"
                       />
                       <span className="text-base mb-0.5">{vibe.label.split(' ')[0]}</span>
-                      <span className="text-xs font-medium text-gray-700">{vibe.label.split(' ').slice(1).join(' ')}</span>
+                      <span className="text-xs font-medium text-gray-300">{vibe.label.split(' ').slice(1).join(' ')}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">
+                <div className="bg-red-950 border border-red-800 rounded-xl p-3 text-sm text-red-400">
                   {error}
                   {isAtLimit && (
                     <div className="mt-2">
@@ -377,7 +377,7 @@ function PlannerContent() {
                 disabled={loading || isAtLimit}
                 className={`w-full py-4 rounded-xl font-bold text-base transition-all duration-200 flex items-center justify-center gap-2 ${
                   isAtLimit
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
                     : loading
                     ? 'bg-primary-400 text-white cursor-wait'
                     : 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-500/25 hover:-translate-y-0.5'
@@ -399,7 +399,7 @@ function PlannerContent() {
               </button>
 
               {!isPro && !isAtLimit && (
-                <p className="text-xs text-center text-gray-400">
+                <p className="text-xs text-center text-gray-500">
                   {remainingFree === 1 ? 'Last free itinerary!' : `${remainingFree} free left`}
                   {' · '}
                   <Link href="/pricing" className="text-primary-600 hover:underline">
@@ -415,8 +415,8 @@ function PlannerContent() {
             {!itinerary && !loading && (
               <div className="card flex flex-col items-center justify-center text-center py-20 min-h-[400px]">
                 <div className="text-6xl mb-4">🗺️</div>
-                <h3 className="text-xl font-semibold text-gray-700 mb-2">Your itinerary will appear here</h3>
-                <p className="text-gray-400 max-w-sm">
+                <h3 className="text-xl font-semibold text-gray-200 mb-2">Your itinerary will appear here</h3>
+                <p className="text-gray-500 max-w-sm">
                   Fill in your trip details and click "Generate Itinerary" to get a personalized day-by-day plan.
                 </p>
               </div>
@@ -425,10 +425,10 @@ function PlannerContent() {
             {loading && !itinerary && (
               <div className="card flex flex-col items-center justify-center text-center py-20 min-h-[400px]">
                 <div className="text-5xl mb-4 animate-bounce">✈️</div>
-                <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                <h3 className="text-xl font-semibold text-gray-200 mb-2">
                   Building your itinerary...
                 </h3>
-                <p className="text-gray-400">
+                <p className="text-gray-500">
                   Claude AI is researching {form.destination} and crafting your plan
                 </p>
                 <div className="mt-6 flex gap-2">
@@ -446,8 +446,8 @@ function PlannerContent() {
             {itinerary && (
               <div className="space-y-4 animate-fade-in">
                 {/* Booking links */}
-                <div className="card bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-100">
-                  <h3 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">
+                <div className="card bg-gradient-to-r from-blue-950 to-indigo-950 border-blue-900">
+                  <h3 className="font-bold text-gray-100 mb-3 text-sm uppercase tracking-wide">
                     🔗 Book Your Trip
                   </h3>
                   <div className="flex flex-col sm:flex-row gap-3">
@@ -472,7 +472,7 @@ function PlannerContent() {
                       <span className="text-xs opacity-75">↗</span>
                     </a>
                   </div>
-                  <p className="text-xs text-gray-400 mt-2">* Affiliate links. We may earn a small commission at no cost to you.</p>
+                  <p className="text-xs text-gray-500 mt-2">* Affiliate links. We may earn a small commission at no cost to you.</p>
                 </div>
 
                 {/* Itinerary content */}
@@ -493,12 +493,12 @@ function PlannerContent() {
 
                 {/* Upgrade prompt after generation */}
                 {!isPro && remainingFree <= 1 && (
-                  <div className="card bg-gradient-to-br from-primary-50 to-emerald-50 border-primary-200 text-center">
+                  <div className="card bg-gradient-to-br from-primary-950 to-emerald-950 border-primary-800 text-center">
                     <div className="text-3xl mb-2">⭐</div>
-                    <h3 className="font-bold text-gray-900 mb-1">
+                    <h3 className="font-bold text-white mb-1">
                       {remainingFree === 0 ? "You've used all free itineraries!" : "Last free itinerary used!"}
                     </h3>
-                    <p className="text-gray-500 text-sm mb-4">
+                    <p className="text-gray-400 text-sm mb-4">
                       Upgrade to Pro for unlimited itineraries at just $9.99/month.
                     </p>
                     <Link href="/pricing" className="btn-primary">

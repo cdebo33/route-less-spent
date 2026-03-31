@@ -75,39 +75,39 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-gray-950">
       <Navbar />
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="bg-white border-b border-gray-100 py-16">
+        <section className="bg-gray-950 border-b border-gray-800 py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
               Simple, honest pricing
             </h1>
-            <p className="text-xl text-gray-500">
+            <p className="text-xl text-gray-400">
               Start free. Upgrade when you need unlimited itineraries.
             </p>
           </div>
         </section>
 
         {/* Pricing Cards */}
-        <section className="py-16">
+        <section className="py-16 bg-gray-950">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
 
               {/* Free Tier */}
-              <div className="card border-2 border-gray-100 hover:border-gray-200 transition-colors">
+              <div className="card border-2 border-gray-700 hover:border-gray-600 transition-colors">
                 <div className="mb-6">
-                  <div className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full mb-3">
+                  <div className="inline-flex items-center px-3 py-1 bg-gray-800 text-gray-400 text-xs font-semibold rounded-full mb-3">
                     FREE
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900">Explorer</h2>
+                  <h2 className="text-2xl font-bold text-white">Explorer</h2>
                   <div className="mt-3 flex items-baseline gap-1">
-                    <span className="text-4xl font-black text-gray-900">$0</span>
-                    <span className="text-gray-400">/ forever</span>
+                    <span className="text-4xl font-black text-white">$0</span>
+                    <span className="text-gray-500">/ forever</span>
                   </div>
-                  <p className="text-gray-500 text-sm mt-2">
+                  <p className="text-gray-400 text-sm mt-2">
                     Perfect for trying the tool or planning an occasional trip.
                   </p>
                 </div>
@@ -115,10 +115,10 @@ export default function PricingPage() {
                 <ul className="space-y-3 mb-8">
                   {freeFeatures.map((feature, i) => (
                     <li key={i} className="flex items-start gap-2.5 text-sm">
-                      <svg className="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                       </svg>
-                      <span className="text-gray-700">{feature}</span>
+                      <span className="text-gray-300">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -129,7 +129,7 @@ export default function PricingPage() {
               </div>
 
               {/* Pro Tier */}
-              <div className="relative card border-2 border-primary-400 bg-gradient-to-b from-primary-50 to-white">
+              <div className="relative card border-2 border-primary-500 bg-gradient-to-b from-primary-950 to-gray-900">
                 {/* Popular badge */}
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                   <div className="bg-primary-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
@@ -138,15 +138,15 @@ export default function PricingPage() {
                 </div>
 
                 <div className="mb-6 pt-2">
-                  <div className="inline-flex items-center px-3 py-1 bg-primary-100 text-primary-700 text-xs font-semibold rounded-full mb-3">
+                  <div className="inline-flex items-center px-3 py-1 bg-primary-900 text-primary-300 text-xs font-semibold rounded-full mb-3">
                     PRO
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900">Wanderer</h2>
+                  <h2 className="text-2xl font-bold text-white">Wanderer</h2>
                   <div className="mt-3 flex items-baseline gap-1">
-                    <span className="text-4xl font-black text-gray-900">$9.99</span>
+                    <span className="text-4xl font-black text-white">$9.99</span>
                     <span className="text-gray-400">/ month</span>
                   </div>
-                  <p className="text-gray-500 text-sm mt-2">
+                  <p className="text-gray-400 text-sm mt-2">
                     For frequent travelers and trip planners who need unlimited access.
                   </p>
                 </div>
@@ -154,10 +154,10 @@ export default function PricingPage() {
                 <ul className="space-y-3 mb-8">
                   {proFeatures.map((feature, i) => (
                     <li key={i} className="flex items-start gap-2.5 text-sm">
-                      <svg className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                       </svg>
-                      <span className={`text-gray-700 ${i === 0 ? 'font-semibold text-primary-700' : ''}`}>
+                      <span className={`text-gray-300 ${i === 0 ? 'font-semibold text-primary-300' : ''}`}>
                         {feature}
                       </span>
                     </li>
@@ -165,7 +165,7 @@ export default function PricingPage() {
                 </ul>
 
                 {error && (
-                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
+                  <div className="mb-4 p-3 bg-red-950 border border-red-800 rounded-xl text-sm text-red-400">
                     {error}
                   </div>
                 )}
@@ -192,14 +192,14 @@ export default function PricingPage() {
                   )}
                 </button>
 
-                <p className="text-xs text-center text-gray-400 mt-3">
+                <p className="text-xs text-center text-gray-500 mt-3">
                   Secure checkout via Stripe · Cancel anytime
                 </p>
               </div>
             </div>
 
             {/* Trust badges */}
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-gray-400 text-sm">
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-gray-500 text-sm">
               <div className="flex items-center gap-2">
                 <span className="text-xl">🔒</span>
                 <span>Secured by Stripe</span>
@@ -221,22 +221,22 @@ export default function PricingPage() {
         </section>
 
         {/* Feature comparison */}
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-gray-900">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
+            <h2 className="text-2xl font-bold text-white text-center mb-8">
               What&apos;s included?
             </h2>
 
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 font-semibold text-gray-500 w-1/2">Feature</th>
-                    <th className="text-center py-3 font-semibold text-gray-500">Free</th>
-                    <th className="text-center py-3 font-semibold text-primary-700">Pro</th>
+                  <tr className="border-b border-gray-700">
+                    <th className="text-left py-3 font-semibold text-gray-400 w-1/2">Feature</th>
+                    <th className="text-center py-3 font-semibold text-gray-400">Free</th>
+                    <th className="text-center py-3 font-semibold text-primary-400">Pro</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-gray-800">
                   {[
                     ['Itinerary generations', '3 total', 'Unlimited'],
                     ['Day-by-day planning', '✓', '✓'],
@@ -248,11 +248,11 @@ export default function PricingPage() {
                     ['AI generation speed', 'Standard', 'Priority'],
                     ['New features first', '–', '✓'],
                   ].map(([feature, free, pro]) => (
-                    <tr key={feature} className="hover:bg-gray-50">
-                      <td className="py-3 text-gray-700 font-medium">{feature}</td>
+                    <tr key={feature} className="hover:bg-gray-800">
+                      <td className="py-3 text-gray-300 font-medium">{feature}</td>
                       <td className="py-3 text-center text-gray-500">{free}</td>
                       <td className="py-3 text-center">
-                        <span className={pro === '–' ? 'text-gray-300' : 'text-primary-600 font-semibold'}>
+                        <span className={pro === '–' ? 'text-gray-700' : 'text-primary-400 font-semibold'}>
                           {pro}
                         </span>
                       </td>
@@ -265,9 +265,9 @@ export default function PricingPage() {
         </section>
 
         {/* FAQ */}
-        <section className="py-16 bg-slate-50">
+        <section className="py-16 bg-gray-950">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
+            <h2 className="text-2xl font-bold text-white text-center mb-8">
               Frequently asked questions
             </h2>
 
@@ -275,15 +275,15 @@ export default function PricingPage() {
               {faqs.map((faq, i) => (
                 <div
                   key={i}
-                  className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+                  className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden"
                 >
                   <button
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
                     className="w-full flex items-center justify-between px-6 py-4 text-left"
                   >
-                    <span className="font-medium text-gray-900 text-sm pr-4">{faq.q}</span>
+                    <span className="font-medium text-gray-100 text-sm pr-4">{faq.q}</span>
                     <svg
-                      className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-200 ${openFaq === i ? 'rotate-180' : ''}`}
+                      className={`w-5 h-5 text-gray-500 flex-shrink-0 transition-transform duration-200 ${openFaq === i ? 'rotate-180' : ''}`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -292,7 +292,7 @@ export default function PricingPage() {
                     </svg>
                   </button>
                   {openFaq === i && (
-                    <div className="px-6 pb-4 text-sm text-gray-500 leading-relaxed border-t border-gray-50 pt-3 animate-fade-in">
+                    <div className="px-6 pb-4 text-sm text-gray-400 leading-relaxed border-t border-gray-800 pt-3 animate-fade-in">
                       {faq.a}
                     </div>
                   )}

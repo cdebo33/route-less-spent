@@ -144,13 +144,13 @@ export default function LandingPage() {
         {/* Wave divider */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 48H1440V0C1200 32 960 48 720 48C480 48 240 32 0 0V48Z" fill="#f8fafc"/>
+            <path d="M0 48H1440V0C1200 32 960 48 720 48C480 48 240 32 0 0V48Z" fill="#030712"/>
           </svg>
         </div>
       </section>
 
       {/* Popular Destinations */}
-      <section className="py-12 bg-slate-50">
+      <section className="py-12 bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm font-medium text-gray-500 mb-6 uppercase tracking-wider">
             Popular Budget Destinations
@@ -160,11 +160,11 @@ export default function LandingPage() {
               <Link
                 key={dest.name}
                 href={`/planner?destination=${dest.name}`}
-                className="group bg-white rounded-2xl p-4 text-center border border-gray-100 hover:border-primary-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+                className="group bg-gray-900 rounded-2xl p-4 text-center border border-gray-800 hover:border-primary-600 hover:shadow-md hover:shadow-primary-900/30 hover:-translate-y-0.5 transition-all duration-200"
               >
                 <div className="text-3xl mb-2">{dest.emoji}</div>
-                <div className="font-semibold text-gray-900 text-sm">{dest.name}</div>
-                <div className="text-primary-600 text-xs font-medium mt-0.5">{dest.budget}</div>
+                <div className="font-semibold text-white text-sm">{dest.name}</div>
+                <div className="text-primary-400 text-xs font-medium mt-0.5">{dest.budget}</div>
               </Link>
             ))}
           </div>
@@ -172,7 +172,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="section-title">Everything you need to travel smarter</h2>
@@ -185,11 +185,11 @@ export default function LandingPage() {
             {features.map((feature) => (
               <div
                 key={feature.title}
-                className="group p-6 rounded-2xl bg-slate-50 hover:bg-primary-50 border border-transparent hover:border-primary-100 transition-all duration-200"
+                className="group p-6 rounded-2xl bg-gray-800 hover:bg-gray-750 border border-gray-700 hover:border-primary-700 transition-all duration-200"
               >
                 <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -197,7 +197,7 @@ export default function LandingPage() {
       </section>
 
       {/* How it Works */}
-      <section className="py-20 bg-gradient-to-b from-slate-50 to-white">
+      <section className="py-20 bg-gray-950">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="section-title">Plan a trip in 3 steps</h2>
@@ -226,14 +226,14 @@ export default function LandingPage() {
               },
             ].map((item) => (
               <div key={item.step} className="text-center">
-                <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+                <div className="w-16 h-16 bg-gray-800 border border-gray-700 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
                   {item.icon}
                 </div>
-                <div className="text-xs font-bold text-primary-500 uppercase tracking-widest mb-2">
+                <div className="text-xs font-bold text-primary-400 uppercase tracking-widest mb-2">
                   Step {item.step}
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -241,7 +241,7 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="section-title">Loved by budget travelers</h2>
@@ -249,20 +249,20 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((t) => (
-              <div key={t.name} className="card hover:shadow-md transition-shadow duration-200">
+              <div key={t.name} className="card hover:border-gray-700 transition-all duration-200">
                 <div className="flex items-center gap-1 mb-4">
                   {'★★★★★'.split('').map((star, i) => (
                     <span key={i} className="text-yellow-400 text-sm">{star}</span>
                   ))}
                 </div>
-                <p className="text-gray-700 text-sm leading-relaxed mb-4 italic">"{t.quote}"</p>
+                <p className="text-gray-300 text-sm leading-relaxed mb-4 italic">"{t.quote}"</p>
                 <div className="flex items-center gap-3 mt-auto">
                   <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-emerald-500 flex items-center justify-center text-white text-xs font-bold">
                     {t.avatar}
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 text-sm">{t.name}</div>
-                    <div className="text-gray-400 text-xs">{t.location}</div>
+                    <div className="font-semibold text-white text-sm">{t.name}</div>
+                    <div className="text-gray-500 text-xs">{t.location}</div>
                   </div>
                 </div>
               </div>
