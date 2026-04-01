@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
 
-const FREE_LIMIT = 3
+const FREE_LIMIT = 1
 const STORAGE_KEY = 'rls_itinerary_count'
 const SAVED_ITINERARIES_KEY = 'rls_saved_itineraries'
 
@@ -129,7 +129,7 @@ function PlannerContent() {
     }
 
     if (isAtLimit) {
-      setError('You\'ve used all 3 free itineraries. Upgrade to Pro for unlimited plans.')
+      setError('You\'ve used your free itinerary. Upgrade to Pro for unlimited plans.')
       return
     }
 
@@ -232,7 +232,7 @@ function PlannerContent() {
               {remainingFree === 0 ? (
                 <>⚠️ Free limit reached — <Link href="/pricing" className="underline font-bold">Upgrade to Pro</Link></>
               ) : (
-                <>{remainingFree === 3 ? '🎉 ' : '⏳ '}{remainingFree} free {remainingFree === 1 ? 'itinerary' : 'itineraries'} remaining</>
+                <>{remainingFree === 1 ? '🎉 ' : '⏳ '}{remainingFree} free {remainingFree === 1 ? 'itinerary' : 'itineraries'} remaining</>
               )}
             </div>
           )}

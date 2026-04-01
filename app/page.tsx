@@ -213,7 +213,7 @@ export default function LandingPage() {
             Start free. Upgrade anytime.
           </h2>
           <p className="text-xl text-primary-100 mb-8">
-            Get 3 free itineraries, then go Pro for unlimited plans at just <strong className="text-white">$9.99/month</strong>.
+            Try it free, then go Pro for unlimited plans at just <strong className="text-white">$9.99/month</strong>.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

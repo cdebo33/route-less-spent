@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
 const freeFeatures = [
-  '3 itineraries per lifetime',
+  '1 free itinerary',
   'Day-by-day travel plans',
   'Cost breakdowns',
   'Money-saving tips',
@@ -37,7 +37,7 @@ const faqs = [
   },
   {
     q: 'Is the free tier really free? No credit card needed?',
-    a: 'Yes! The free tier gives you 3 itineraries with no credit card required. Your usage is tracked in your browser.',
+    a: 'Yes! The free tier gives you 1 itinerary with no credit card required. Your usage is tracked in your browser.',
   },
   {
     q: 'What payment methods are accepted?',
@@ -234,7 +234,7 @@ export default function PricingPage() {
                 </thead>
                 <tbody className="divide-y divide-gray-800">
                   {[
-                    ['Itinerary generations', '3 total', 'Unlimited'],
+                    ['Itinerary generations', '1 free', 'Unlimited'],
                     ['Day-by-day planning', '✓', '✓'],
                     ['Cost breakdowns', '✓', '✓'],
                     ['Money-saving tips', '✓', '✓'],
