@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
+import { downloadItineraryText } from '@/lib/download'
 
 const SAVED_ITINERARIES_KEY = 'rls_saved_itineraries'
 
@@ -33,15 +34,6 @@ function renderMarkdown(text: string): string {
     .replace(/<p><\/p>/g, '')
 }
 
-function downloadItinerary(itinerary: SavedItinerary) {
-  const blob = new Blob([itinerary.content], { type: 'text/plain' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `${itinerary.destination.replace(/\s+/g, '-')}-itinerary-${itinerary.startDate}.txt`
-  a.click()
-  URL.revokeObjectURL(url)
-}
 
 export default function ItinerariesPage() {
   const [itineraries, setItineraries] = useState<SavedItinerary[]>([])
@@ -100,7 +92,7 @@ export default function ItinerariesPage() {
                   {/* Actions */}
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <button
-                      onClick={() => downloadItinerary(itinerary)}
+                      onClick={() => downloadItineraryText(itinerary.destination, itinerary.startDate, itinerary.content)}
                       className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
                       title="Download as text file"
                     >

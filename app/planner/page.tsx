@@ -7,6 +7,7 @@ import Footer from '@/components/Footer'
 import Link from 'next/link'
 import ItineraryMap from '@/components/ItineraryMap'
 import type { MapLocation } from '@/components/ItineraryMapInner'
+import { downloadItineraryText } from '@/lib/download'
 
 const FREE_LIMIT = 1
 const STORAGE_KEY = 'rls_itinerary_count'
@@ -42,15 +43,6 @@ function saveItinerary(params: {
   localStorage.setItem(SAVED_ITINERARIES_KEY, JSON.stringify(saved.slice(0, 20)))
 }
 
-function downloadAsText(destination: string, startDate: string, content: string) {
-  const blob = new Blob([content], { type: 'text/plain' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `${destination.replace(/\s+/g, '-')}-itinerary-${startDate}.txt`
-  a.click()
-  URL.revokeObjectURL(url)
-}
 
 const accommodationStyles = [
   { value: 'hostel', label: '🛏 Hostel / Dorm', desc: 'Budget-friendly, social vibe' },
@@ -584,7 +576,7 @@ function PlannerContent() {
                           🗺️ {showMap ? 'Hide Map' : 'View Map'}
                         </button>
                         <button
-                          onClick={() => downloadAsText(form.destination, form.startDate, itinerary)}
+                          onClick={() => downloadItineraryText(form.destination, form.startDate, itinerary)}
                           className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
