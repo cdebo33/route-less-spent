@@ -35,27 +35,6 @@ const features = [
   },
 ]
 
-const testimonials = [
-  {
-    quote: "I planned a 10-day Southeast Asia trip for under $800 using Route Less Spent. The cost breakdown was spot-on.",
-    name: "Mia Chen",
-    location: "Vancouver, Canada",
-    avatar: "MC",
-  },
-  {
-    quote: "As a solo backpacker, this tool is a game changer. The money-saving tips alone saved me hundreds.",
-    name: "James Okonkwo",
-    location: "Lagos, Nigeria",
-    avatar: "JO",
-  },
-  {
-    quote: "Finally an AI travel planner that actually understands budget travel. Not just luxury recommendations.",
-    name: "Sofia Reyes",
-    location: "Madrid, Spain",
-    avatar: "SR",
-  },
-]
-
 const destinations = [
   { name: 'Bali', emoji: '🌴', budget: '$35/day' },
   { name: 'Prague', emoji: '🏰', budget: '$55/day' },
@@ -118,25 +97,11 @@ export default function LandingPage() {
 
             {/* Social proof */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-gray-400">
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-2">
-                  {['MC', 'JO', 'SR', 'AB'].map((initials) => (
-                    <div key={initials} className="w-7 h-7 rounded-full bg-gradient-to-br from-primary-500 to-emerald-500 border-2 border-slate-900 flex items-center justify-center text-xs font-bold text-white">
-                      {initials[0]}
-                    </div>
-                  ))}
-                </div>
-                <span>2,400+ trips planned</span>
-              </div>
-              <span className="hidden sm:block">·</span>
-              <div className="flex items-center gap-1">
-                {'★★★★★'.split('').map((star, i) => (
-                  <span key={i} className="text-yellow-400">{star}</span>
-                ))}
-                <span className="ml-1">4.9/5</span>
-              </div>
-              <span className="hidden sm:block">·</span>
               <span>Free to start — no card needed</span>
+              <span className="hidden sm:block">·</span>
+              <span>No credit card required</span>
+              <span className="hidden sm:block">·</span>
+              <span>Cancel anytime</span>
             </div>
           </div>
         </div>
@@ -234,37 +199,6 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <h2 className="section-title">Loved by budget travelers</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t) => (
-              <div key={t.name} className="card hover:border-gray-700 transition-all duration-200">
-                <div className="flex items-center gap-1 mb-4">
-                  {'★★★★★'.split('').map((star, i) => (
-                    <span key={i} className="text-yellow-400 text-sm">{star}</span>
-                  ))}
-                </div>
-                <p className="text-gray-300 text-sm leading-relaxed mb-4 italic">"{t.quote}"</p>
-                <div className="flex items-center gap-3 mt-auto">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-emerald-500 flex items-center justify-center text-white text-xs font-bold">
-                    {t.avatar}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-white text-sm">{t.name}</div>
-                    <div className="text-gray-500 text-xs">{t.location}</div>
-                  </div>
-                </div>
               </div>
             ))}
           </div>

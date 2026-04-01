@@ -212,10 +212,6 @@ export default function PricingPage() {
                 <span className="text-xl">🤖</span>
                 <span>Powered by Claude AI</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xl">🌍</span>
-                <span>2,400+ trips planned</span>
-              </div>
             </div>
           </div>
         </section>
