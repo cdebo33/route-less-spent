@@ -5,6 +5,8 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
 import { downloadItineraryText } from '@/lib/download'
+import ItineraryMap from '@/components/ItineraryMap'
+import type { MapLocation } from '@/components/ItineraryMapInner'
 
 const SAVED_ITINERARIES_KEY = 'rls_saved_itineraries'
 
@@ -44,10 +46,131 @@ function renderMarkdown(text: string): string {
     .replace(/<p><\/p>/g, '')
 }
 
+function TripCard({ itinerary, onDelete }: { itinerary: SavedItinerary; onDelete: (id: string) => void }) {
+  const [expanded, setExpanded] = useState(false)
+  const [showMap, setShowMap] = useState(false)
+  const [mapLocations, setMapLocations] = useState<MapLocation[]>([])
+  const [mapLoading, setMapLoading] = useState(false)
+
+  const handleLoadMap = async () => {
+    if (showMap) { setShowMap(false); return }
+    setShowMap(true)
+    if (mapLocations.length > 0) return
+    setMapLoading(true)
+    try {
+      const res = await fetch('/api/extract-locations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itinerary: itinerary.content }),
+      })
+      const data = await res.json()
+      setMapLocations(data.locations || [])
+    } catch {
+      setMapLocations([])
+    } finally {
+      setMapLoading(false)
+    }
+  }
+
+  return (
+    <div className="card border border-gray-800">
+      {/* Card header */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h2 className="text-lg font-bold text-white">{itinerary.destination}</h2>
+            <span className="text-xs px-2 py-0.5 bg-primary-950 text-primary-400 border border-primary-800 rounded-full">
+              {itinerary.days} day{itinerary.days !== 1 ? 's' : ''}
+            </span>
+          </div>
+          <p className="text-sm text-gray-400 mt-1">
+            From {itinerary.origin} · {itinerary.startDate} → {itinerary.endDate} · {itinerary.travelers} traveler{parseInt(itinerary.travelers) !== 1 ? 's' : ''}
+          </p>
+          <p className="text-xs text-gray-600 mt-1">
+            Saved {new Date(itinerary.createdAt).toLocaleDateString()}
+          </p>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
+          <button
+            onClick={handleLoadMap}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+          >
+            🗺️ {showMap ? 'Hide Map' : 'Map'}
+          </button>
+          <button
+            onClick={() => downloadItineraryText(itinerary.destination, itinerary.startDate, itinerary.content)}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+            title="Download as text file"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Download
+          </button>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary-400 bg-primary-950 hover:bg-primary-900 border border-primary-800 rounded-lg transition-colors"
+          >
+            {expanded ? 'Collapse' : 'View'}
+          </button>
+          <button
+            onClick={() => onDelete(itinerary.id)}
+            className="p-1.5 text-gray-600 hover:text-red-400 hover:bg-red-950 rounded-lg transition-colors"
+            title="Delete"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Map */}
+      {showMap && (
+        <div className="mt-4 rounded-xl overflow-hidden border border-gray-800">
+          <div className="px-4 py-2 bg-gray-800 flex items-center justify-between">
+            <span className="text-sm font-semibold text-gray-200">🗺️ Trip Map</span>
+            {mapLoading && <span className="text-xs text-gray-500">Extracting locations...</span>}
+            {!mapLoading && mapLocations.length > 0 && (
+              <span className="text-xs text-gray-500">{mapLocations.length} {mapLocations.length === 1 ? 'city' : 'cities'} · click pins for details</span>
+            )}
+          </div>
+          {mapLoading ? (
+            <div className="h-72 flex items-center justify-center text-gray-500 text-sm bg-gray-900">
+              <div className="text-center">
+                <div className="text-2xl mb-2 animate-bounce">🗺️</div>
+                Extracting locations and geocoding...
+              </div>
+            </div>
+          ) : mapLocations.length > 0 ? (
+            <div className="h-72">
+              <ItineraryMap locations={mapLocations} />
+            </div>
+          ) : (
+            <div className="h-20 flex items-center justify-center text-gray-500 text-sm bg-gray-900">
+              Could not extract locations from this itinerary.
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Expanded itinerary content */}
+      {expanded && (
+        <div className="mt-6 pt-6 border-t border-gray-800">
+          <div
+            className="itinerary-content"
+            dangerouslySetInnerHTML={{ __html: renderMarkdown(itinerary.content) }}
+          />
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function ItinerariesPage() {
   const [itineraries, setItineraries] = useState<SavedItinerary[]>([])
-  const [expanded, setExpanded] = useState<string | null>(null)
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem(SAVED_ITINERARIES_KEY) || '[]')
@@ -58,7 +181,6 @@ export default function ItinerariesPage() {
     const updated = itineraries.filter((i) => i.id !== id)
     setItineraries(updated)
     localStorage.setItem(SAVED_ITINERARIES_KEY, JSON.stringify(updated))
-    if (expanded === id) setExpanded(null)
   }
 
   return (
@@ -81,64 +203,7 @@ export default function ItinerariesPage() {
         ) : (
           <div className="space-y-4">
             {itineraries.map((itinerary) => (
-              <div key={itinerary.id} className="card border border-gray-800">
-                {/* Card header */}
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h2 className="text-lg font-bold text-white">{itinerary.destination}</h2>
-                      <span className="text-xs px-2 py-0.5 bg-primary-950 text-primary-400 border border-primary-800 rounded-full">
-                        {itinerary.days} day{itinerary.days !== 1 ? 's' : ''}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-400 mt-1">
-                      From {itinerary.origin} · {itinerary.startDate} → {itinerary.endDate} · {itinerary.travelers} traveler{parseInt(itinerary.travelers) !== 1 ? 's' : ''}
-                    </p>
-                    <p className="text-xs text-gray-600 mt-1">
-                      Saved {new Date(itinerary.createdAt).toLocaleDateString()}
-                    </p>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <button
-                      onClick={() => downloadItineraryText(itinerary.destination, itinerary.startDate, itinerary.content)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
-                      title="Download as text file"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                      </svg>
-                      Download
-                    </button>
-                    <button
-                      onClick={() => setExpanded(expanded === itinerary.id ? null : itinerary.id)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary-400 bg-primary-950 hover:bg-primary-900 border border-primary-800 rounded-lg transition-colors"
-                    >
-                      {expanded === itinerary.id ? 'Collapse' : 'View'}
-                    </button>
-                    <button
-                      onClick={() => handleDelete(itinerary.id)}
-                      className="p-1.5 text-gray-600 hover:text-red-400 hover:bg-red-950 rounded-lg transition-colors"
-                      title="Delete"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Expanded content */}
-                {expanded === itinerary.id && (
-                  <div className="mt-6 pt-6 border-t border-gray-800">
-                    <div
-                      className="itinerary-content"
-                      dangerouslySetInnerHTML={{ __html: renderMarkdown(itinerary.content) }}
-                    />
-                  </div>
-                )}
-              </div>
+              <TripCard key={itinerary.id} itinerary={itinerary} onDelete={handleDelete} />
             ))}
           </div>
         )}
