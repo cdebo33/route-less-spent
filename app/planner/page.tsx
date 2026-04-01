@@ -61,8 +61,18 @@ const tripVibes = [
   { value: 'off_beaten_path', label: '🗺 Off the Beaten Path', desc: 'Unique, lesser-known spots' },
 ]
 
-function renderMarkdown(text: string): string {
+function escapeHtml(text: string): string {
   return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
+function renderMarkdown(text: string): string {
+  const safe = escapeHtml(text)
+  return safe
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')
     .replace(/^# (.+)$/gm, '<h1>$1</h1>')

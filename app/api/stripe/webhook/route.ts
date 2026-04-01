@@ -19,9 +19,8 @@ export async function POST(request: NextRequest) {
 
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
   if (!webhookSecret) {
-    // In development, skip signature verification
-    console.warn('STRIPE_WEBHOOK_SECRET not set — skipping signature verification (dev only)')
-    return Response.json({ received: true })
+    console.error('STRIPE_WEBHOOK_SECRET is not configured')
+    return Response.json({ error: 'Webhook not configured' }, { status: 500 })
   }
 
   let event: Stripe.Event

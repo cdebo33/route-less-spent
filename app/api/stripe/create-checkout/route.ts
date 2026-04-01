@@ -1,7 +1,13 @@
 import Stripe from 'stripe'
 import { NextRequest } from 'next/server'
+import { rateLimit } from '@/lib/rateLimit'
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
+  if (!rateLimit(ip, 10, 60_000)) {
+    return Response.json({ error: 'Too many requests.' }, { status: 429 })
+  }
+
   if (!process.env.STRIPE_SECRET_KEY) {
     return Response.json({ error: 'Stripe not configured' }, { status: 500 })
   }
@@ -39,6 +45,6 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     console.error('Stripe checkout error:', error)
     const message = error instanceof Error ? error.message : 'Failed to create checkout session'
-    return Response.json({ error: message }, { status: 500 })
+    return Response.json({ error: 'Failed to create checkout session' }, { status: 500 })
   }
 }

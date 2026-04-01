@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { NextRequest } from 'next/server'
+import { rateLimit } from '@/lib/rateLimit'
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -7,6 +8,12 @@ const client = new Anthropic({
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit: 5 requests per minute per IP
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
+    if (!rateLimit(ip, 5, 60_000)) {
+      return Response.json({ error: 'Too many requests. Please wait a minute.' }, { status: 429 })
+    }
+
     const body = await request.json()
     const { origin, destination, startDate, endDate, budget, travelers, accommodation, vibe, days } = body
 
@@ -14,8 +21,29 @@ export async function POST(request: NextRequest) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
+    // Input length limits
+    if (
+      String(origin).length > 100 ||
+      String(destination).length > 100 ||
+      String(budget).length > 10 ||
+      String(travelers).length > 2
+    ) {
+      return Response.json({ error: 'Invalid input' }, { status: 400 })
+    }
+
+    // Validate date format
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+      return Response.json({ error: 'Invalid date format' }, { status: 400 })
+    }
+
+    // Validate budget is a positive number
+    const budgetNum = parseFloat(budget)
+    if (isNaN(budgetNum) || budgetNum <= 0 || budgetNum > 1_000_000) {
+      return Response.json({ error: 'Invalid budget' }, { status: 400 })
+    }
+
     if (!process.env.ANTHROPIC_API_KEY) {
-      return Response.json({ error: 'API key not configured' }, { status: 500 })
+      return Response.json({ error: 'Server configuration error' }, { status: 500 })
     }
 
     const accommodationLabels: Record<string, string> = {
@@ -160,7 +188,6 @@ Keep all prices realistic and accurate for current ${destination} costs. Be spec
     })
   } catch (error: unknown) {
     console.error('Itinerary generation error:', error)
-    const message = error instanceof Error ? error.message : 'Internal server error'
-    return Response.json({ error: message }, { status: 500 })
+    return Response.json({ error: 'Failed to generate itinerary. Please try again.' }, { status: 500 })
   }
 }

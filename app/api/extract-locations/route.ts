@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { NextRequest } from 'next/server'
+import { rateLimit } from '@/lib/rateLimit'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -16,11 +17,20 @@ async function geocode(location: string): Promise<{ lat: number; lng: number } |
 }
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
+  if (!rateLimit(ip, 10, 60_000)) {
+    return Response.json({ error: 'Too many requests.' }, { status: 429 })
+  }
+
   if (!process.env.ANTHROPIC_API_KEY) {
-    return Response.json({ error: 'API key not configured' }, { status: 500 })
+    return Response.json({ error: 'Server configuration error' }, { status: 500 })
   }
 
   const { itinerary } = await request.json()
+
+  if (!itinerary || typeof itinerary !== 'string' || itinerary.length > 50_000) {
+    return Response.json({ error: 'Invalid input' }, { status: 400 })
+  }
 
   try {
     const response = await client.messages.create({
@@ -63,7 +73,7 @@ ${itinerary.slice(0, 5000)}`
 
     return Response.json({ locations })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Failed to extract locations'
-    return Response.json({ error: message }, { status: 500 })
+    console.error('Extract locations error:', error)
+    return Response.json({ error: 'Failed to extract locations' }, { status: 500 })
   }
 }
