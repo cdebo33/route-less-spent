@@ -38,17 +38,21 @@ export async function POST(request: NextRequest) {
       max_tokens: 1024,
       messages: [{
         role: 'user',
-        content: `Extract the primary location visited each day from this travel itinerary. Return ONLY a valid JSON array, no other text.
+        content: `Read this entire travel itinerary and extract only the distinct cities or areas visited, in the order they are visited. Only create a new entry when the traveler moves to a genuinely different city or region — do not create a new entry for every single day if they stay in the same place.
 
-Format: [{"day": 1, "title": "Day 1: Title", "location": "Specific Area, City, Country", "description": "Main activity in 8 words or less"}]
+Return ONLY a valid JSON array, no other text.
+
+Format: [{"days": "1-5", "city": "City, Country", "description": "Brief description in 8 words or less"}]
 
 Rules:
-- Include city and country in every location for accurate geocoding
-- If a day has multiple locations, pick the first/main one
-- Keep descriptions short
+- Cover the ENTIRE itinerary from day 1 to the last day — do not stop early
+- Group consecutive days in the same city/area into one entry with a day range (e.g. "days": "1-5")
+- If only one day in a city use a single number (e.g. "days": "6")
+- Include country in every city name for accurate geocoding
+- Only add a new entry when the traveler actually travels to a different place
 
-Itinerary:
-${itinerary.slice(0, 5000)}`
+Full itinerary:
+${itinerary}`
       }]
     })
 
@@ -56,19 +60,26 @@ ${itinerary.slice(0, 5000)}`
     const match = text.match(/\[[\s\S]*\]/)
     if (!match) return Response.json({ locations: [] })
 
-    const extracted: { day: number; title: string; location: string; description: string }[] = JSON.parse(match[0])
+    const extracted: { days: string; city: string; description: string }[] = JSON.parse(match[0])
 
-    // Geocode — deduplicate to avoid redundant requests
+    // Geocode each unique city
     const geocache = new Map<string, { lat: number; lng: number } | null>()
     for (const item of extracted) {
-      if (!geocache.has(item.location)) {
-        geocache.set(item.location, await geocode(item.location))
+      if (!geocache.has(item.city)) {
+        geocache.set(item.city, await geocode(item.city))
         await new Promise(r => setTimeout(r, 1100)) // Nominatim rate limit: 1 req/sec
       }
     }
 
     const locations = extracted
-      .map(item => ({ ...item, coords: geocache.get(item.location) }))
+      .map((item, i) => ({
+        day: i + 1,
+        days: item.days,
+        title: item.city,
+        location: item.city,
+        description: item.description,
+        coords: geocache.get(item.city),
+      }))
       .filter(item => item.coords != null)
 
     return Response.json({ locations })

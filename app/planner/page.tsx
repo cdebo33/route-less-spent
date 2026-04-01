@@ -551,7 +551,7 @@ function PlannerContent() {
                       <span className="text-sm font-semibold text-gray-200">🗺️ Trip Map</span>
                       {mapLoading && <span className="text-xs text-gray-500">Extracting locations...</span>}
                       {!mapLoading && mapLocations.length > 0 && (
-                        <span className="text-xs text-gray-500">{mapLocations.length} locations · click pins for details</span>
+                        <span className="text-xs text-gray-500">{mapLocations.length} {mapLocations.length === 1 ? 'city' : 'cities'} · click pins for details</span>
                       )}
                     </div>
                     {mapLoading ? (

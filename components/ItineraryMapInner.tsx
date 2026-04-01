@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css'
 
 export interface MapLocation {
   day: number
+  days?: string
   title: string
   location: string
   description: string
@@ -76,7 +77,9 @@ export default function ItineraryMapInner({ locations }: { locations: MapLocatio
             <div style={{ minWidth: '160px', fontFamily: 'sans-serif' }}>
               <div style={{ fontWeight: 700, fontSize: '13px', marginBottom: '4px' }}>{loc.title}</div>
               <div style={{ color: '#555', fontSize: '12px', marginBottom: '2px' }}>{loc.description}</div>
-              <div style={{ color: '#999', fontSize: '11px' }}>{loc.location}</div>
+              <div style={{ color: '#999', fontSize: '11px' }}>
+                {loc.days ? `Day${loc.days.includes('-') ? 's' : ''} ${loc.days}` : `Day ${loc.day}`}
+              </div>
             </div>
           </Popup>
         </Marker>
