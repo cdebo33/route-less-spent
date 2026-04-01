@@ -30,6 +30,9 @@ export default function Navbar() {
             <Link href="/planner" className="text-gray-400 hover:text-white font-medium transition-colors text-sm">
               Planner
             </Link>
+            <Link href="/itineraries" className="text-gray-400 hover:text-white font-medium transition-colors text-sm">
+              My Trips
+            </Link>
             <Link href="/pricing" className="text-gray-400 hover:text-white font-medium transition-colors text-sm">
               Pricing
             </Link>
@@ -87,6 +90,9 @@ export default function Navbar() {
               </Link>
               <Link href="/planner" onClick={() => setMobileOpen(false)} className="px-2 py-2 text-gray-300 hover:text-primary-400 font-medium transition-colors">
                 Planner
+              </Link>
+              <Link href="/itineraries" onClick={() => setMobileOpen(false)} className="px-2 py-2 text-gray-300 hover:text-primary-400 font-medium transition-colors">
+                My Trips
               </Link>
               <Link href="/pricing" onClick={() => setMobileOpen(false)} className="px-2 py-2 text-gray-300 hover:text-primary-400 font-medium transition-colors">
                 Pricing

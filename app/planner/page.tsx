@@ -8,6 +8,7 @@ import Link from 'next/link'
 
 const FREE_LIMIT = 3
 const STORAGE_KEY = 'rls_itinerary_count'
+const SAVED_ITINERARIES_KEY = 'rls_saved_itineraries'
 
 function getItineraryCount(): number {
   if (typeof window === 'undefined') return 0
@@ -18,6 +19,35 @@ function incrementItineraryCount(): number {
   const count = getItineraryCount() + 1
   localStorage.setItem(STORAGE_KEY, count.toString())
   return count
+}
+
+function saveItinerary(params: {
+  destination: string
+  origin: string
+  startDate: string
+  endDate: string
+  travelers: string
+  days: number
+  content: string
+}) {
+  const saved = JSON.parse(localStorage.getItem(SAVED_ITINERARIES_KEY) || '[]')
+  const newEntry = {
+    id: Date.now().toString(),
+    ...params,
+    createdAt: new Date().toISOString(),
+  }
+  saved.unshift(newEntry)
+  localStorage.setItem(SAVED_ITINERARIES_KEY, JSON.stringify(saved.slice(0, 20)))
+}
+
+function downloadAsText(destination: string, startDate: string, content: string) {
+  const blob = new Blob([content], { type: 'text/plain' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${destination.replace(/\s+/g, '-')}-itinerary-${startDate}.txt`
+  a.click()
+  URL.revokeObjectURL(url)
 }
 
 const accommodationStyles = [
@@ -134,6 +164,17 @@ function PlannerContent() {
         fullText += chunk
         setItinerary(fullText)
       }
+
+      // Save itinerary to localStorage
+      saveItinerary({
+        destination: form.destination,
+        origin: form.origin,
+        startDate: form.startDate,
+        endDate: form.endDate,
+        travelers: form.travelers,
+        days,
+        content: fullText,
+      })
 
       // Count usage after successful generation
       const newCount = incrementItineraryCount()
@@ -477,6 +518,25 @@ function PlannerContent() {
 
                 {/* Itinerary content */}
                 <div className="card">
+                  {!loading && (
+                    <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-700">
+                      <span className="text-sm text-gray-400">✅ Itinerary saved to My Trips</span>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => downloadAsText(form.destination, form.startDate, itinerary)}
+                          className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                          </svg>
+                          Download
+                        </button>
+                        <Link href="/itineraries" className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary-400 bg-primary-950 hover:bg-primary-900 border border-primary-800 rounded-lg transition-colors">
+                          My Trips →
+                        </Link>
+                      </div>
+                    </div>
+                  )}
                   <div
                     className="itinerary-content"
                     dangerouslySetInnerHTML={{
