@@ -105,6 +105,9 @@ html.light .btn-secondary { background-color: #f1f5f9 !important; border-color: 
 html.light nav { background-color: rgba(248, 250, 252, 0.9) !important; border-color: #e2e8f0 !important; }
 html.light .divide-gray-800 > * { border-color: #e2e8f0 !important; }
 html.light .hover\:bg-gray-800:hover { background-color: #e2e8f0 !important; }
+html.light .bg-primary-950 { background-color: #f0fdf4 !important; }
+html.light .bg-primary-900 { background-color: #dcfce7 !important; }
+html.light .border-primary-800 { border-color: #86efac !important; }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
