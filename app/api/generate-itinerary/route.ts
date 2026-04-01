@@ -64,7 +64,6 @@ export async function POST(request: NextRequest) {
     }
 
     const totalDays = parseInt(days) || 7
-    const budgetNum = parseFloat(budget)
     const travelersNum = parseInt(travelers) || 1
     const perPersonBudget = budgetNum / travelersNum
 
