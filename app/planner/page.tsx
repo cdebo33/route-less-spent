@@ -5,6 +5,8 @@ import { useSearchParams } from 'next/navigation'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
+import ItineraryMap from '@/components/ItineraryMap'
+import type { MapLocation } from '@/components/ItineraryMapInner'
 
 const FREE_LIMIT = 1
 const STORAGE_KEY = 'rls_itinerary_count'
@@ -101,6 +103,9 @@ function PlannerContent() {
   const [error, setError] = useState('')
   const [usageCount, setUsageCount] = useState(0)
   const [isPro, setIsPro] = useState(false)
+  const [mapLocations, setMapLocations] = useState<MapLocation[]>([])
+  const [mapLoading, setMapLoading] = useState(false)
+  const [showMap, setShowMap] = useState(false)
   const itineraryRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -136,6 +141,8 @@ function PlannerContent() {
     setError('')
     setLoading(true)
     setItinerary('')
+    setMapLocations([])
+    setShowMap(false)
 
     try {
       const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
@@ -188,6 +195,25 @@ function PlannerContent() {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleLoadMap = async () => {
+    if (mapLocations.length > 0) { setShowMap(true); return }
+    setMapLoading(true)
+    setShowMap(true)
+    try {
+      const res = await fetch('/api/extract-locations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itinerary }),
+      })
+      const data = await res.json()
+      setMapLocations(data.locations || [])
+    } catch {
+      setMapLocations([])
+    } finally {
+      setMapLoading(false)
     }
   }
 
@@ -516,12 +542,47 @@ function PlannerContent() {
                   <p className="text-xs text-gray-500 mt-2">* Affiliate links. We may earn a small commission at no cost to you.</p>
                 </div>
 
+                {/* Map */}
+                {showMap && (
+                  <div className="card p-0 overflow-hidden">
+                    <div className="px-4 py-3 border-b border-gray-800 flex items-center justify-between">
+                      <span className="text-sm font-semibold text-gray-200">🗺️ Trip Map</span>
+                      {mapLoading && <span className="text-xs text-gray-500">Extracting locations...</span>}
+                      {!mapLoading && mapLocations.length > 0 && (
+                        <span className="text-xs text-gray-500">{mapLocations.length} locations · click pins for details</span>
+                      )}
+                    </div>
+                    {mapLoading ? (
+                      <div className="h-80 flex items-center justify-center text-gray-500 text-sm bg-gray-900">
+                        <div className="text-center">
+                          <div className="text-2xl mb-2 animate-bounce">🗺️</div>
+                          Extracting locations and geocoding...
+                        </div>
+                      </div>
+                    ) : mapLocations.length > 0 ? (
+                      <div className="h-80">
+                        <ItineraryMap locations={mapLocations} />
+                      </div>
+                    ) : (
+                      <div className="h-32 flex items-center justify-center text-gray-500 text-sm">
+                        Could not extract locations from this itinerary.
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* Itinerary content */}
                 <div className="card">
                   {!loading && (
                     <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-700">
                       <span className="text-sm text-gray-400">✅ Itinerary saved to My Trips</span>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 flex-wrap">
+                        <button
+                          onClick={handleLoadMap}
+                          className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+                        >
+                          🗺️ {showMap ? 'Hide Map' : 'View Map'}
+                        </button>
                         <button
                           onClick={() => downloadAsText(form.destination, form.startDate, itinerary)}
                           className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
